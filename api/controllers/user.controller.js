@@ -7,6 +7,28 @@ export const test = (req, res) => {
   });
 };
 
+export const updateUser = async (req, res, next) => {
+  if (req.user.id != req.params.userId) {
+    return next(errorHandler(403, "You are not allowed to update this user"));
+  }
+
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        $set: {
+          caloriesPerDay: req.body.caloriesPerDay,
+        },
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updateUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteUser = async (req, res, next) => {
   if (!req.user.isAdmin && req.user.id != req.params.userId) {
     return next(errorHandler(403, "You are not allowed to delete this user"));
@@ -34,10 +56,11 @@ export const getUsers = async (req, res, next) => {
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "You are not allowed to see all users"));
   }
-  try {
-    const sortDirection = req.query.sord === "asc" ? 1 : -1;
 
-    const users = await User.find().sort({ createdAt: sortDirection });
+  try {
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
+
+    const users = await User.find();
 
     const usersWithoutPassword = users.map((user) => {
       const { password, ...rest } = user._doc;
@@ -56,6 +79,7 @@ export const getUsers = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   try {
+    console.log(req.params.userId);
     const user = await User.findById(req.params.userId);
     if (!user) {
       return next(errorHandler(404, "User not found"));

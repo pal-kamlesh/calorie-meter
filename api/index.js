@@ -27,6 +27,7 @@ app.use("/api/meal", mealRoutes);
 app.use((err, req, res, next) => {
   const statusCode = err.status || 500;
   const message = err.message || "Internal server Error";
+  console.log(err);
   res.status(statusCode).json({
     success: false,
     statusCode,

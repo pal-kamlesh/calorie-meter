@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Dashboard, Home, SignIn, SignUp } from "./pages";
-import { PrivateRoute } from "./components/index.js";
+import { Header, PrivateRoute } from "./components/index.js";
 
 function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />

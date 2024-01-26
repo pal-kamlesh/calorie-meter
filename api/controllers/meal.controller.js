@@ -21,18 +21,16 @@ export const createMeal = async (req, res, next) => {
 
 export const getMeals = async (req, res, next) => {
   try {
-    const { userId } = req.query;
-
-    if (userId !== req.user.id) {
+    if (!req.user.isAdmin) {
       return next(errorHandler(403, "You are not allowed to get meals "));
     }
 
     const sortDirection = req.query.order === "asc" ? 1 : -1;
-    const meals = await Meal.find({ userId }).sort({
+    const meals = await Meal.find().sort({
       updatedAt: sortDirection,
     });
 
-    const totalMeals = await Meal.countDocuments({ userId });
+    const totalMeals = await Meal.countDocuments();
 
     res.status(200).json({
       meals,
@@ -44,9 +42,6 @@ export const getMeals = async (req, res, next) => {
 };
 
 export const deleteMeal = async (req, res, next) => {
-  console.log(
-    `user id in cookies: ${req.user.id} ||| user id in params: ${req.params.userId}`
-  );
   if (!req.user.isAdmin && req.user.id != req.params.userId) {
     return next(errorHandler(403, "You are not allwed to delete this post"));
   }

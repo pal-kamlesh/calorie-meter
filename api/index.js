@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookeParser from "cookie-parser";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import mealRoutes from "./routes/meal.route.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(cookeParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/meal", mealRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.status || 500;
@@ -32,6 +34,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log("Server is running on port 3000");
 });

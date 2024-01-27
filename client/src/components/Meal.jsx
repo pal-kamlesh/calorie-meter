@@ -2,10 +2,13 @@
 import { MdDelete, MdEditDocument } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { updateMeals } from "../redux/user/userSlice";
+import { useState } from "react";
+import { Modal, Spinner } from "flowbite-react";
 
 export default function Meal({ props, setMeals, meals, setMeal, setToUpdate }) {
   const { text, calories, userId, _id, overflow } = props;
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleEdit = () => {
     const mealToEdit = meals.filter((m) => m._id === _id);
@@ -15,6 +18,7 @@ export default function Meal({ props, setMeals, meals, setMeal, setToUpdate }) {
 
   const handleDelete = async () => {
     try {
+      setLoading(true);
       const res = await fetch(`api/meal/deletemeal/${_id}/${userId}`, {
         method: "DELETE",
         headers: {
@@ -24,13 +28,16 @@ export default function Meal({ props, setMeals, meals, setMeal, setToUpdate }) {
       const data = await res.json();
 
       if (!res.ok) {
+        setLoading(false);
         console.log(data.message);
       } else {
         setMeals((prevMeals) => prevMeals.filter((meal) => meal._id !== _id));
         dispatch(updateMeals(meals));
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   return (
@@ -53,6 +60,15 @@ export default function Meal({ props, setMeals, meals, setMeal, setToUpdate }) {
           className=" text-red-700 hover:text-red-500 cursor-pointer "
         />
       </div>
+      <Modal show={loading} onClose={() => setLoading(false)} popup size="md">
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center flex items-center justify-center">
+            <Spinner size="sm" />
+            <span className=" pl-3">Deleating...</span>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

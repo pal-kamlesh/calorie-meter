@@ -61,7 +61,6 @@ export const updateMeal = async (req, res, next) => {
   }
   const userId = req.params.userId;
   try {
-    console.log(req.body.overflow);
     const updatedMeal = await Meal.findByIdAndUpdate(
       req.params.mealId,
       {

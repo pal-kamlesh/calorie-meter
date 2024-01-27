@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Meal from "../components/Meal";
 import { updateMeals } from "../redux/user/userSlice";
+import { Spinner } from "flowbite-react";
 
 export default function Home() {
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [toUpdate, setToUpdate] = useState(false);
   const [meals, setMeals] = useState(currentUser?.meals ?? []);
+  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [meal, setMeal] = useState({
     text: "",
@@ -70,7 +72,7 @@ export default function Home() {
 
     if (toUpdate) {
       try {
-        console.log(obj.overflow);
+        setLoading(true);
         const res = await fetch(
           `api/meal/updatemeal/${meal._id}/${meal.userId}`,
           {
@@ -85,17 +87,21 @@ export default function Home() {
 
         if (!res.ok) {
           console.log(data.message);
+          setLoading(false);
         } else {
           setMeals(data);
           dispatch(updateMeals(data));
           setMeal(() => ({ text: "", calories: "" }));
           setToUpdate(false);
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     } else {
       try {
+        setLoading(true);
         const res = await fetch(`/api/meal/create`, {
           method: "POST",
           headers: {
@@ -106,13 +112,16 @@ export default function Home() {
         const data = await res.json();
         if (!res.ok) {
           console.log(data.message);
+          setLoading(false);
         } else {
           dispatch(updateMeals(data));
           setMeals(data);
           setMeal(() => ({ text: "", calories: "" }));
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     }
   };
@@ -126,7 +135,7 @@ export default function Home() {
         className="mb-10 flex flex-col items-center justify-center gap-1 rounded-lg bg-gray-200 p-10 shadow-lg  md:flex-row"
         onSubmit={handleSubmit}
       >
-        <label htmlFor="location" className="">
+        <label htmlFor="location">
           Text
           <input
             value={meal.text}
@@ -139,7 +148,7 @@ export default function Home() {
           />
         </label>
 
-        <label htmlFor="calories" className="">
+        <label htmlFor="calories">
           Calories
           <input
             value={meal.calories}
@@ -152,10 +161,26 @@ export default function Home() {
           ></input>
         </label>
 
-        <button className="  color rounded border-none bg-purple-500 px-6 py-2 text-white hover:opacity-50">
-          {toUpdate ? "Update" : "Add"}
+        <button
+          type="submit"
+          disabled={loading}
+          className="color rounded border-none bg-purple-500 px-6 py-2 text-white hover:opacity-50"
+        >
+          {loading ? (
+            <>
+              <Spinner size="sm" />
+              <span className=" pl-3">Loading...</span>
+            </>
+          ) : toUpdate ? (
+            "Update"
+          ) : (
+            "Add"
+          )}
         </button>
       </form>
+      <div className="max-w-6xl mx-auto p-3 flex items-center justify-center">
+        {`Calories Target: ${currentUser.caloriesPerDay}`}
+      </div>
 
       {meals.length < 1 ? (
         <div className="max-w-6xl mx-auto p-3 flex items-center justify-center">

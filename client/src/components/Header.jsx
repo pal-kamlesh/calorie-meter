@@ -68,9 +68,13 @@ export default function Header() {
         </Navbar.Collapse>
       ) : (
         <Navbar.Collapse>
-          <Navbar.Link active={path === "/"} as={"div"}>
-            <p className="">{`Calories per Day: ${currentUser?.caloriesPerDay}`}</p>
-          </Navbar.Link>
+          <Link to="/">
+            <Navbar.Link active={path === "/"} as="div">
+              Home
+            </Navbar.Link>
+          </Link>
+          <Navbar.Link as={"div"}>Contact</Navbar.Link>
+          <Navbar.Link as={"div"}>About</Navbar.Link>
         </Navbar.Collapse>
       )}
     </Navbar>

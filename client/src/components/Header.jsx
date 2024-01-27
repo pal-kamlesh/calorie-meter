@@ -2,7 +2,7 @@ import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import logo from "../assets/logo.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import { signoutSuccess } from "../redux/user/userSlice";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -27,7 +27,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar fluid rounded>
+    <Navbar fluid rounded className=" border-b-2 ">
       <Navbar.Brand>
         <img src={logo} className="mr-3 h-[50px] " alt="Flowbite React Logo" />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
@@ -62,16 +62,22 @@ export default function Header() {
         )}
         <Navbar.Toggle />
       </div>
-      <Navbar.Collapse>
-        <Link to="/">
-          <Navbar.Link active={path === "/"} as={"div"}>
-            Home
-          </Navbar.Link>
-        </Link>
-        <Navbar.Link href="#">About</Navbar.Link>
+      {currentUser?.isAdmin ? (
+        <Navbar.Collapse>
+          <NavLink as="div">Welcom to the Dashboard</NavLink>
+        </Navbar.Collapse>
+      ) : (
+        <Navbar.Collapse>
+          <Link to="/">
+            <Navbar.Link active={path === "/"} as={"div"}>
+              Home
+            </Navbar.Link>
+          </Link>
+          <Navbar.Link href="#">About</Navbar.Link>
 
-        <Navbar.Link href="#">Contact</Navbar.Link>
-      </Navbar.Collapse>
+          <Navbar.Link href="#">Contact</Navbar.Link>
+        </Navbar.Collapse>
+      )}
     </Navbar>
   );
 }

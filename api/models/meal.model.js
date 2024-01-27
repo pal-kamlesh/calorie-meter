@@ -14,6 +14,11 @@ const mealSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    overflow: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -3,7 +3,7 @@ import { errorHandler } from "../utils/error.js";
 
 export const createMeal = async (req, res, next) => {
   try {
-    const { text, calories, userId } = req.body;
+    const { text, calories, userId, overflow } = req.body;
     if (userId !== req.user.id) {
       return next(errorHandler(403, "You are not allowed to create this meal"));
     }
@@ -11,9 +11,11 @@ export const createMeal = async (req, res, next) => {
       text,
       calories,
       userId,
+      overflow,
     });
     await newMeal.save();
-    res.status(200).json(newMeal);
+    const meals = await Meal.find({ userId });
+    res.status(200).json(meals);
   } catch (error) {
     next(error);
   }
@@ -57,19 +59,23 @@ export const updateMeal = async (req, res, next) => {
   if (!req.user.isAdmin && req.user.id != req.params.userId) {
     return next(errorHandler(403, "You are not allwed to delete this post"));
   }
+  const userId = req.params.userId;
   try {
+    console.log(req.body.overflow);
     const updatedMeal = await Meal.findByIdAndUpdate(
       req.params.mealId,
       {
         $set: {
           text: req.body.text,
           calories: req.body.calories,
+          overflow: req.body.overflow,
         },
       },
       { new: true }
     );
+    const meals = await Meal.find({ userId });
 
-    res.status(200).json(updatedMeal);
+    res.status(200).json(meals);
   } catch (error) {
     next(error);
   }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Button, Modal, Table } from "flowbite-react";
+import { Button, Modal, Spinner, Table } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function DashMeals() {
@@ -8,17 +8,21 @@ export default function DashMeals() {
   const [meals, setMeals] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [mealIdToDelete, setMealIdToDelete] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchMeals = async () => {
+      setLoading(true);
       try {
         const res = await fetch(`/api/meal/getmeals`);
         const data = await res.json();
         if (res.ok) {
           setMeals(data.meals);
+          setLoading(false);
         }
       } catch (error) {
         console.log(error.message);
+        setLoading(false);
       }
     };
     if (currentUser.isAdmin) {
@@ -49,6 +53,20 @@ export default function DashMeals() {
       console.log(error);
     }
   };
+
+  if (loading) {
+    return (
+      <Modal show={loading} onClose={() => setLoading(false)} popup size="md">
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center flex items-center justify-center">
+            <Spinner size="sm" />
+            <span className=" pl-3">Loading...</span>
+          </div>
+        </Modal.Body>
+      </Modal>
+    );
+  }
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">

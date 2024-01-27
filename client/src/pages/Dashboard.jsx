@@ -23,7 +23,7 @@ export default function Dashboard() {
         <DashSidebar />
       </div>
       {/* profile */}
-      {tab === "profile" && <DashProfile />}
+      {tab === "settings" && <DashProfile />}
       {/* user */}
       {tab === "users" && <DashUsers />}
       {/* meals */}

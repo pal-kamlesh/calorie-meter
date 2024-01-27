@@ -156,6 +156,7 @@ export default function Home() {
           {toUpdate ? "Update" : "Add"}
         </button>
       </form>
+
       {meals.length < 1 ? (
         <div className="max-w-6xl mx-auto p-3 flex items-center justify-center">
           <h4>You have not added any meal today!</h4>

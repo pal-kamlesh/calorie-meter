@@ -39,15 +39,15 @@ export default function DashSidebar() {
     <Sidebar className="w-full wd:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
-          <Link to="/dashboard?tab=profile">
+          <Link to="/dashboard?tab=settings">
             <Sidebar.Item
-              active={tab === "profile"}
+              active={tab === "settings"}
               icon={HiArrowCircleRight}
               label={currentUser.isAdmin ? "Admin" : "User"}
               labelColor="dark"
               as="div"
             >
-              Profile
+              Settings
             </Sidebar.Item>
           </Link>
           {currentUser.isAdmin && (

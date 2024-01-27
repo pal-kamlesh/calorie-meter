@@ -53,8 +53,8 @@ export default function Header() {
                 {currentUser?.email}
               </span>
             </Dropdown.Header>
-            <Link to="/dashboard?tab=profile">
-              <Dropdown.Item>Profile</Dropdown.Item>
+            <Link to="/dashboard?tab=settings">
+              <Dropdown.Item>Settings</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleSignout}>Sign out</Dropdown.Item>
@@ -68,14 +68,9 @@ export default function Header() {
         </Navbar.Collapse>
       ) : (
         <Navbar.Collapse>
-          <Link to="/">
-            <Navbar.Link active={path === "/"} as={"div"}>
-              Home
-            </Navbar.Link>
-          </Link>
-          <Navbar.Link href="#">About</Navbar.Link>
-
-          <Navbar.Link href="#">Contact</Navbar.Link>
+          <Navbar.Link active={path === "/"} as={"div"}>
+            <p className="">{`Calories per Day: ${currentUser?.caloriesPerDay}`}</p>
+          </Navbar.Link>
         </Navbar.Collapse>
       )}
     </Navbar>

@@ -39,7 +39,7 @@ export default function SignIn() {
       if (res.ok) {
         dispatch(signInSuccess(data));
         if (data.isAdmin) {
-          navigate("/dashboard?tab=profile");
+          navigate("/dashboard?tab=settings");
         } else {
           navigate("/");
         }

@@ -5,7 +5,14 @@ import { updateMeals } from "../redux/user/userSlice";
 import { useState } from "react";
 import { Modal, Spinner } from "flowbite-react";
 
-export default function Meal({ props, setMeals, meals, setMeal, setToUpdate }) {
+export default function Meal({
+  props,
+  setMeals,
+  meals,
+  setMeal,
+  setToUpdate,
+  setCaloriesCount,
+}) {
   const { text, calories, userId, _id, overflow } = props;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -31,8 +38,9 @@ export default function Meal({ props, setMeals, meals, setMeal, setToUpdate }) {
         setLoading(false);
         console.log(data.message);
       } else {
+        setCaloriesCount((prev) => prev - calories);
         setMeals((prevMeals) => prevMeals.filter((meal) => meal._id !== _id));
-        dispatch(updateMeals(meals));
+        dispatch(updateMeals(data));
         setLoading(false);
       }
     } catch (error) {

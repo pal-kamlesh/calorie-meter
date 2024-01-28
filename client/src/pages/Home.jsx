@@ -179,7 +179,7 @@ export default function Home() {
         </button>
       </form>
       <div className="max-w-6xl mx-auto p-3 flex items-center justify-center">
-        {`Calories Target: ${currentUser.caloriesPerDay}`}
+        {`Calories Target: ${currentUser.caloriesPerDay} | Current Total: ${caloriesCount}`}
       </div>
 
       {meals.length < 1 ? (
@@ -196,6 +196,7 @@ export default function Home() {
               meals={meals}
               setMeal={setMeal}
               setToUpdate={setToUpdate}
+              setCaloriesCount={setCaloriesCount}
             />
           ))}
         </div>

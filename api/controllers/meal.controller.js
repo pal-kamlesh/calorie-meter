@@ -44,12 +44,14 @@ export const getMeals = async (req, res, next) => {
 };
 
 export const deleteMeal = async (req, res, next) => {
+  const userId = req.params.userId;
   if (!req.user.isAdmin && req.user.id != req.params.userId) {
     return next(errorHandler(403, "You are not allwed to delete this post"));
   }
   try {
     await Meal.findByIdAndDelete(req.params.mealId);
-    res.status(200).json("The meal has been deleted");
+    const meals = await Meal.find({ userId });
+    res.status(200).json(meals);
   } catch (error) {
     next(error);
   }

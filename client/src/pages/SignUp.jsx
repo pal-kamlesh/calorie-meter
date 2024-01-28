@@ -41,7 +41,7 @@ export default function SignUp() {
   };
   return (
     <div className=" min-h-screen mt-20">
-      <div className=" flex p-3 max-w-3xl mx-auto flex-row items-center gap-5">
+      <div className=" flex p-3 max-w-3xl mx-auto flex-col sm:flex-row items-center gap-5">
         {/* left */}
         <div className=" flex-1 order-2">
           <Link to="/" className=" font-bold dark:text-white text-4xl">
